@@ -55,7 +55,7 @@ class Keyboard
 
     public function setPrice(int $price): static
     {
-        $this->price = $price;
+        $this->price = htmlspecialchars($price);
 
         return $this;
     }
@@ -91,7 +91,7 @@ class Keyboard
 
     public function setStock(int $stock): static
     {
-        $this->stock = $stock;
+        $this->stock = htmlspecialchars($stock);
 
         return $this;
     }
