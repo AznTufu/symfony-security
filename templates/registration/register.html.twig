@@ -3,6 +3,28 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+<style>
+    .form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 96vh;
+    }
+    .input {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 16px;
+        label {
+            min-width: 100px;
+            text-align: right;
+        }
+    }
+    .register {
+        margin-top: 20px;
+    }
+</style>
+<div class="form">
     <h1>Register</h1>
 
     {{ form_errors(registrationForm) }}
@@ -16,4 +38,9 @@
 
         <button type="submit" class="btn">Register</button>
     {{ form_end(registrationForm) }}
+
+    <div class="register">
+        <a href="{{ path('app_login') }}">Login</a>
+    </div>
+</div>
 {% endblock %}

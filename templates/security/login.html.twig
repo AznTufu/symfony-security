@@ -20,6 +20,9 @@
             text-align: right;
         }
     }
+    .register {
+        margin-top: 20px;
+    }
 </style>
 
 <form method="post">
@@ -49,5 +52,9 @@
     <button class="btn btn-lg btn-primary" type="submit">
         Sign in
     </button>
+
+    <div class="register">
+        <a href="{{ path('app_register') }}">Register</a>
+    </div>
 </form>
 {% endblock %}

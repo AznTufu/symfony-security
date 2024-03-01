@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class KeyboardController extends AbstractController
 {
@@ -20,6 +22,26 @@ class KeyboardController extends AbstractController
         $form = $this->createForm(KeyboardType::class, $un_clavier);
 
         $form->handleRequest($r);
+
+        /** @var UploadedFile $file */
+        $file = $form['imageUrl']->getData();
+
+        if ($file) {
+            $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $safeFilename = $slugger->slug($originalFilename);
+            $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $newFilename
+                );
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            $un_clavier->setImageUrl('/assets/'.$newFilename);
+        }
 
         if($form->isSubmitted() && $form->isValid()){
             $slug = $slugger->slug($un_clavier->getName()) . '-' . uniqid();
