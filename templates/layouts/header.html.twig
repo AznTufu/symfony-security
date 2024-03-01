@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<style>
+    nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #7DAAEE;
+        padding: 1rem 3rem;
+        ul {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            list-style: none;
+            li a{
+                font-size: 20px;
+                color: white;
+                text-decoration: none;
+            }
+        }
+    }
+</style>
+
+<nav>
+    <ul>
+        <li><a href="{{ path('app_keyboard') }}">Home</a></li>
+        {% if not app.user %}
+            <li><a href="{{ path('app_login') }}">Login</a></li>
+        {% else %}
+            <li><a href="{{ path('app_logout') }}">Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+{% endblock %}

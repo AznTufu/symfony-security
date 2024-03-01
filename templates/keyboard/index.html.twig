@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% include "layouts/header.html.twig" %}
+
+<style>
+    section {
+        margin: 0 auto 40px;
+        max-width: 1600px;
+        h2 {
+            font-size: 24px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 40px auto;
+            gap: 60px;
+            .card {
+                max-width: 500px;
+                min-width: 200px;
+                img {
+                    width: 100%;
+                    height: 180px;
+                    object-fit: cover;
+                }
+                h3 {
+                    text-align: center;
+                    a {
+                        text-decoration: none;
+                    }
+                } 
+                .product {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 10px;
+                    margin: 10px 0;
+                }
+                .edit {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 10px;
+                }
+            }
+        }
+    }
+</style>
+
+<section>
+    <h2>Keyboards</h2>
+    <div class="container">
+        {% for keyboard in keyboards %}
+        <div class="card">
+            {% if keyboard.imageUrl %}
+                <img src="{{ keyboard.imageUrl }}" alt="{{ keyboard.name }}"/>
+            {% else %}
+                <img src="/assets/keyboard.webp" alt="{{ keyboard.name }}"/>
+            {% endif %}
+            <h3> 
+                <a href="{{ path('app_keyboard_show', {'slug': keyboard.slug}) }}">
+                    {{ keyboard.name|raw  }}
+                </a>
+            </h3>
+            <p>{{ keyboard.description|raw  }}</p>
+            <div class="product"> 
+                <div>Stock: {{ keyboard.stock|raw }}</div>
+                <div>{{ keyboard.price|raw }} €</div>
+            </div>
+
+            {% if is_granted('ROLE_ADMIN') %}
+            <div class="edit">
+                <form action="{{ path('app_keyboard_edit', {'slug': keyboard.slug}) }}" method="GET">
+                    <input type="submit" value="Modifier">
+                </form>
+
+                <form action="{{ path('app_keyboard_delete', {'id': keyboard.id}) }}" method="POST">
+                    <input type="hidden" name="csrf" value={{csrf_token('delete' ~ keyboard.id)}}>
+                    <input type="submit" value="Supprimer">
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+            <p>Aucun keyboards</p>
+        {% endfor %}
+    </div>
+    <h2>Ajouter un keyboard</h2/>
+    
+    {{ form(form) }}
+</section>
+{% endblock %}
